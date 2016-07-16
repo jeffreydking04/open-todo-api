@@ -4,4 +4,5 @@ class List < ApplicationRecord
 
   validates :name, presence: true
   validates :user_id, presence: true
+  validates :permission, inclusion: { in: %w(private viewable open) }
 end
