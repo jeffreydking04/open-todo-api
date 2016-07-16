@@ -1,5 +1,5 @@
 class ItemSerializer < ActiveModel::Serializer
-  attributes :item
+  attributes :id, :item
 
   def item
     object.item
