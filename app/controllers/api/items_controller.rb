@@ -1,5 +1,6 @@
 class Api::ItemsController < ApiController
   before_action :authenticated?
+  before_action :authorized?, only: [:update, :destroy]
 
   def index
     list = List.find(params[:list_id])
@@ -21,6 +22,7 @@ class Api::ItemsController < ApiController
 
   def update
     item = Item.find(params[:id])
+
     if item.update(item_params)
       render json: item
     else
@@ -32,5 +34,12 @@ class Api::ItemsController < ApiController
 
   def item_params
     params.require(:item).permit(:item)
+  end
+
+  def authorized?
+    item = Item.find(params[:id])
+    unless @current_user == item.list.user
+      render json: { error: "Not Authorized", status: 403 }, status: 403
+    end
   end
 end 
